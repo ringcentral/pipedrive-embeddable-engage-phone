@@ -1,9 +1,9 @@
 
 const webpack = require('webpack')
 const sysConfigDefault = require('./config.default')
-const ExtraneousFileCleanupPlugin = require('webpack-extraneous-file-cleanup-plugin')
 const path = require('path')
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
+const AntdDayjsWebpackPlugin = require('@electerm/antd-dayjs-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const pack = require('./package.json')
 const cwd = process.cwd()
@@ -46,21 +46,39 @@ const f32 = path.resolve(
   __dirname,
   'node_modules/react-dom/umd/react-dom.production.min.js'
 )
-const opts = {
-  extensions: ['.map', '.js'],
-  minBytes: 3900
-}
-
-const pug = {
-  loader: 'pug-html-loader',
-  options: {
-    data: {
-      _global: {}
+const copyPlugin = new CopyWebpackPlugin({
+  patterns: [
+    {
+      from,
+      to: to1,
+      force: true
+    }, /* {
+      from: f2,
+      to: to4,
+      force: true
+    }, */ {
+      from: f3,
+      to: to4,
+      force: true
+    }, /* {
+      from: f2,
+      to: to4f,
+      force: true
+    }, */
+    {
+      from: f31,
+      to: to4,
+      force: true
+    },
+    {
+      from: f32,
+      to: to4,
+      force: true
     }
-  }
-}
+  ]
+})
 
-var config = {
+const config = {
   mode: 'production',
   entry: {
     content: './src/content.js',
@@ -72,7 +90,8 @@ var config = {
     filename: '[name].js',
     publicPath: '/',
     chunkFilename: '[name].[hash].js',
-    libraryTarget: 'var'
+    libraryTarget: 'var',
+    library: 'Rc'
   },
   resolve: {
     extensions: ['.js', '.json', 'jsx'],
@@ -116,7 +135,9 @@ var config = {
           {
             loader: 'less-loader',
             options: {
-              javascriptEnabled: true
+              lessOptions: {
+                javascriptEnabled: true
+              }
             }
           }
         ]
@@ -128,41 +149,7 @@ var config = {
           {
             loader: 'babel-loader',
             options: {
-              cacheDirectory: true,
-              presets: [
-                '@babel/react',
-                ['@babel/env', {
-                  targets: {
-                    chrome: 58,
-                    node: 'current'
-                  }
-                }]
-              ],
-              plugins: [
-                '@babel/plugin-proposal-class-properties',
-                'babel-plugin-lodash',
-                '@babel/plugin-syntax-dynamic-import',
-                [
-                  '@babel/plugin-proposal-decorators',
-                  {
-                    legacy: true
-                  }
-                ],
-                [
-                  '@babel/plugin-transform-runtime',
-                  {
-                    regenerator: true
-                  }
-                ],
-                [
-                  'import',
-                  {
-                    libraryName: 'antd',
-                    libraryDirectory: 'es',
-                    style: true
-                  }
-                ]
-              ]
+              cacheDirectory: true
             }
           }
         ]
@@ -178,16 +165,6 @@ var config = {
       {
         test: /\.(png|jpg|svg)$/,
         use: ['url-loader?limit=10192&name=images/[hash].[ext]']
-      },
-      {
-        test: /\.pug$/,
-        use: [
-          'file-loader?name=../app/redirect.html',
-          'concat-loader',
-          'extract-loader',
-          'html-loader',
-          pug
-        ]
       }
     ]
   },
@@ -198,34 +175,8 @@ var config = {
       collections: true,
       paths: true
     }),
-    new CopyWebpackPlugin([{
-      from,
-      to: to1,
-      force: true
-    }, /* {
-      from: f2,
-      to: to4,
-      force: true
-    }, */ {
-      from: f3,
-      to: to4,
-      force: true
-    }, /* {
-      from: f2,
-      to: to4f,
-      force: true
-    }, */
-    {
-      from: f31,
-      to: to4,
-      force: true
-    },
-    {
-      from: f32,
-      to: to4,
-      force: true
-    }], {}),
-    new ExtraneousFileCleanupPlugin(opts),
+    copyPlugin,
+    new AntdDayjsWebpackPlugin(),
     new webpack.DefinePlugin({
       'process.env.ringCentralConfigs': JSON.stringify(sysConfigDefault.ringCentralConfigs),
       'process.env.thirdPartyConfigs': JSON.stringify(sysConfigDefault.thirdPartyConfigs),

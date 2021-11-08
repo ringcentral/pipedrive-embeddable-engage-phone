@@ -1,7 +1,7 @@
 {
   "name": "RingCentral Embeddable Engage Voice for PipeDrive",
   "description": "Experimental Engage Voice browser extension for PipeDrive",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "permissions": [
     "http://*/",
     "https://*/",

@@ -9,14 +9,14 @@ import { ringCentralConfigs, thirdPartyConfigs, appVersion } from 'ringcentral-e
 import 'ringcentral-embeddable-extension-common/src/spa/style.styl'
 import './custom.styl'
 
-let {
+const {
   clientID,
   appServer,
   clientSecret
 } = ringCentralConfigs
 
 let appConfigQuery = ''
-let { serviceName } = thirdPartyConfigs
+const { serviceName } = thirdPartyConfigs
 if (clientID || appServer) {
   appConfigQuery = `?zIndex=9999&prefix=${serviceName}-rc&userAgent=${serviceName}_extension%2F${appVersion}&appKey=${clientID}&appSecret=${clientSecret}&appServer=${encodeURIComponent(appServer)}`
 }
@@ -24,9 +24,9 @@ if (clientID || appServer) {
 /* eslint-disable-next-line */
 ;(function() {
   console.log('import RingCentral Embeddable Engage Voice to web page')
-  var rcs = document.createElement('script')
+  const rcs = document.createElement('script')
   rcs.src = 'https://ringcentral.github.io/engage-voice-embeddable/adapter.js' + appConfigQuery
-  var rcs0 = document.getElementsByTagName('script')[0]
+  const rcs0 = document.getElementsByTagName('script')[0]
   rcs0.parentNode.insertBefore(rcs, rcs0)
 })()
 

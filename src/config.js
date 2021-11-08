@@ -39,15 +39,15 @@ export const insertClickToCallButton = [
     // if can not get phone number, will not insert the call button
     // support async
     getContactPhoneNumbers: async () => {
-      let phones = document.querySelectorAll('.viewContainer:not([style*="none"]) [data-test="phone-label"]')
+      const phones = document.querySelectorAll('.viewContainer:not([style*="none"]) [data-test="phone-label"]')
       return Array.from(phones).map((p, i) => {
-        let n = p.parentNode.nextSibling || p.nextSibling
+        const n = p.parentNode.nextSibling || p.nextSibling
         if (!n) {
           return null
         }
-        let title = n ? n.textContent.trim() : 'Direct' + i
-        let id = title
-        let number = p.textContent.trim()
+        const title = n ? n.textContent.trim() : 'Direct' + i
+        const id = title
+        const number = p.textContent.trim().replace('*', '#').replace(' ext. ', '#')
         if (checkPhoneNumber(number)) {
           return {
             id,
@@ -90,17 +90,20 @@ export const hoverShowClickToCallButton = [
 
     // function to get phone numbers, suport async function
     getContactPhoneNumbers: async elem => {
-      let phoneNodes = elem.querySelectorAll('td[data-field="phone"] .value button')
+      let phoneNodes = elem.querySelectorAll('td[data-field="phone"]')
+      if (!phoneNodes.length) {
+        phoneNodes = elem.querySelectorAll('td[data-field="person.phone"]')
+      }
       return Array.from(phoneNodes)
         .map((p, i) => {
-          let nn = p.querySelector('span:not([class])')
+          const nn = p.querySelector('.gridCell__salesPhoneValue')
           let number = nn ? nn.textContent.trim() : ''
           let title = p.querySelector('.gridCell__valueRemark')
           let title0 = title ? title.textContent : 'Direct'
           title0 = title0.trim()
           title = title0.replace(/\(|\)/g, '')
           title = title.trim()
-          number = number.replace(title0, '')
+          number = number.replace(title0, '').replace('*', '#').replace(' ext. ', '#')
           return {
             id: 'p_' + i,
             title,

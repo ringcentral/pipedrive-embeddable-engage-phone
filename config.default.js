@@ -1,6 +1,6 @@
 const os = require('os')
 const extend = require('recursive-assign')
-let config = {
+const config = {
 
   // dev related
   devCPUCount: os.cpus().length,

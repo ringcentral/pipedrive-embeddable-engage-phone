@@ -54,7 +54,7 @@ export async function getContactInfo (body, serviceName) {
     toText = 'Correspondents'
     tos = _.get(body, 'correspondentEntity')
     tos = tos ? [tos] : []
-    let selfNumber = formatPhone(_.get(body, 'conversation.self.phoneNumber'))
+    const selfNumber = formatPhone(_.get(body, 'conversation.self.phoneNumber'))
     froms = await match([selfNumber])
 
     froms = froms[selfNumber] || []
@@ -74,7 +74,7 @@ export async function getContactInfo (body, serviceName) {
     froms = ''
   } else {
     froms = froms.join(', ')
-    let f = formatPhoneLocal(_.get(body, 'call.from.phoneNumber') ||
+    const f = formatPhoneLocal(_.get(body, 'call.from.phoneNumber') ||
       _.get(body, 'conversation.self.phoneNumber') || '')
     froms = `<li>
       <b>${fromText}:</b> ${f}${froms ? '(' + froms + ')' : ''}
@@ -87,7 +87,7 @@ export async function getContactInfo (body, serviceName) {
     tos = ''
   } else {
     tos = tos.join(', ')
-    let t = formatPhoneLocal(_.get(body, 'call.to.phoneNumber') || '')
+    const t = formatPhoneLocal(_.get(body, 'call.to.phoneNumber') || '')
     tos = `<li>
       <b>${toText}:</b> ${t}${tos ? '(' + tos + ')' : '-'}</b>
     </li>
@@ -111,13 +111,13 @@ export async function createForm (body, serviceName, onSubmit) {
     return
   }
   clean()
-  let res = await getContactInfo(body, serviceName)
+  const res = await getContactInfo(body, serviceName)
   if (!res) {
     return
   }
-  let { froms, tos, time } = res
+  const { froms, tos, time } = res
   // let wrapper = document.getElementById('rc-widget')
-  let dom = createElementFromHTML(`
+  const dom = createElementFromHTML(`
     <form class="rc-sync-form animate">
       <div class="rc-sync-inner rc-pd2">
         <h3 class="rc-sync-title rc-pd1b bold">
@@ -144,7 +144,7 @@ export async function createForm (body, serviceName, onSubmit) {
   `)
   dom.onsubmit = e => {
     e.preventDefault()
-    let v = dom.querySelector('.rc-sync-area').value
+    const v = dom.querySelector('.rc-sync-area').value
     onSubmit({
       description: v || ''
     })
@@ -155,7 +155,7 @@ export async function createForm (body, serviceName, onSubmit) {
   //   e.preventDefault()
   //   onSubmit()
   // }
-  let old = document.querySelector('.rc-sync-form')
+  const old = document.querySelector('.rc-sync-form')
   old && old.remove()
   document.getElementById('Pipedrive-rc').appendChild(dom)
   handler = setTimeout(() => {

@@ -10,11 +10,7 @@ Created with [ringcentral-embeddable-extension-factory](https://github.com/ringc
 
 ## Features
 
-- Click to call button
-- Build with custom app config
-- Auto sync call log to Hubspot
-- Sync call log to deal
-- Call from deal page
+- Click to call
 
 ## Try it
 
